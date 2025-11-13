@@ -1,0 +1,19 @@
+Language: Cpp
+BasedOnStyle: LLVM
+# indentation
+IndentWidth: 4
+TabWidth: 4
+# width
+ColumnLimit: 99 
+# alignment
+PointerAlignment: Left
+AlignConsecutiveMacros: true
+AlignConsecutiveDeclarations: true
+AlignTrailingComments: true
+BinPackArguments: false
+# ctor alignment
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerIndentWidth: 4
+# line break
+BreakBeforeBraces: Linux
