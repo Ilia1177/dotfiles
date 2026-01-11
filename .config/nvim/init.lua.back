@@ -1,0 +1,113 @@
+require("config.options")
+require("config.keymaps")
+require("config.autocmds")
+require("config.terminal")
+require("core.lazy")
+
+local on_attach = function(client, bufnr)
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
+  -- Navigation
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+
+  -- Actions
+  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', '<leader>f', function()
+    vim.lsp.buf.format { async = true }
+  end, bufopts)
+
+  -- Diagnostics
+  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
+  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
+  vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, bufopts)
+end
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+-- C/C++ (clangd)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp", "objc", "objcpp" },
+  callback = function()
+    vim.lsp.start({
+      name = "clangd",
+      cmd = { "clangd", "--background-index" },
+      root_dir = vim.fs.dirname(vim.fs.find({
+        'compile_commands.json',
+        '.git',
+        'Makefile'
+      }, { upward = true })[1]),
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+  end,
+})
+
+-- Python (pyright)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    vim.lsp.start({
+      name = "pyright",
+      cmd = { "pyright-langserver", "--stdio" },
+      root_dir = vim.fs.dirname(vim.fs.find({
+        'pyproject.toml',
+        'setup.py',
+        '.git'
+      }, { upward = true })[1]),
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+  end,
+})
+
+-- Lua (lua_ls) - load from separate file if it exists
+local ok, lua_ls_config = pcall(require, 'lsp.luaLs')
+if ok and lua_ls_config and lua_ls_config.setup then
+  lua_ls_config.setup(on_attach, capabilities)
+else
+  -- Fallback native Lua LSP config
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "lua",
+    callback = function()
+      vim.lsp.start({
+        name = "lua_ls",
+        cmd = { "lua-language-server" },
+        root_dir = vim.fs.dirname(vim.fs.find({ '.git' }, { upward = true })[1]) or vim.fn.getcwd(),
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+          Lua = {
+            runtime = { version = 'LuaJIT' },
+            diagnostics = { globals = { 'vim' } },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
+            },
+            telemetry = { enable = false },
+          },
+        },
+      })
+    end,
+  })
+end
+
+-- Diagnostic configuration
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
+
+-- Diagnostic signs
+local signs = { Error = "✘", Warn = "▲", Hint = "⚑", Info = "»" }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end

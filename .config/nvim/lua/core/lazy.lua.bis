@@ -1,0 +1,36 @@
+
+-- Bootstrap Lazy.nvim automatically
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+-- If Lazy.nvim is not installed, clone it automatically
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "--branch=stable",
+    "https://github.com/folke/lazy.nvim.git",
+    lazypath,
+  })
+  print("Installing Lazy.nvim, please restart Neovim...")
+end
+
+-- Add Lazy.nvim to runtime path
+vim.opt.rtp:prepend(lazypath)
+
+-- Setup all plugins
+require("lazy").setup({
+  { import = "plugins" },
+  { import = "plugins.lsp" },
+  -- Load LSP plugin from local folder
+  {
+    "lsp-local",          -- just an identifier
+    dir = vim.fn.stdpath("config") .. "/lua/plugins/lsp",  -- local path
+    lazy = true,
+    event = { "BufReadPre", "BufNewFile" },
+  },
+}, {
+  checker = { enabled = true, notify = false },
+  install = { colorscheme = { "everforest" } },
+  change_detection = { notify = false },
+})
