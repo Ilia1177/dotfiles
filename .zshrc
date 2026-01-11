@@ -1,9 +1,8 @@
+
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 alias ls='ls --color=auto'
-alias mkclass='~/scripts/ocf.sh'
-alias norm='norminette -R CheckForbiddenSourceHeader --use-gitignore'
+alias mkclass='~/.local/bin/scripts/ocf.sh'
 alias ktab='kitty @ launch --type=tab --cwd=current'
-alias francinette=/nfs/homes/npolack/francinette/tester.sh
-alias paco=/nfs/homes/npolack/francinette/tester.sh
 alias http-serv='python3 -m http.server 8000'
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # Git stuff
@@ -34,4 +33,3 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export PATH="/usr/local/opt/openjdk@21/bin:$PATH"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
-
