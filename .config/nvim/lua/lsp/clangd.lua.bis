@@ -1,0 +1,47 @@
+local lsp = require("lsp")
+local utils = require("lsp.utils")
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function(args)
+    vim.notify("=== CLANGD DEBUG START ===", vim.log.levels.INFO)
+    vim.notify("Filetype: " .. vim.bo[args.buf].filetype, vim.log.levels.INFO)
+    
+    local existing = vim.lsp.get_clients({ name = "clangd", bufnr = args.buf })
+    vim.notify("Existing clients: " .. #existing, vim.log.levels.INFO)
+    
+    if #existing > 0 then
+      vim.notify("Clangd already attached, skipping", vim.log.levels.INFO)
+      return
+    end
+    
+    local root = utils.get_root({
+      ".clangd",
+      ".git",
+      "Makefile",
+      "compile_commands.json",
+    }) or vim.fn.getcwd()
+    
+    vim.notify("Root dir: " .. tostring(root), vim.log.levels.INFO)
+    
+    if not root then
+      vim.notify("No root dir found for clangd", vim.log.levels.WARN)
+      return
+    end
+    
+    vim.notify("Starting clangd...", vim.log.levels.INFO)
+    local client_id = vim.lsp.start({
+      name = "clangd",
+      cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--all-scopes-completion",
+      },
+      root_dir = root,
+      on_attach = lsp.on_attach,
+    })
+    
+    vim.notify("Clangd client ID: " .. tostring(client_id), vim.log.levels.INFO)
+  end,
+})

@@ -1,5 +1,5 @@
 local opt = vim.opt -- raccourci pour un peu plus de concision
-
+vim.cmd('filetype plugin indent on')
 -- numéros de ligne
 opt.relativenumber = true -- affichage des numéros de ligne relatives à la position actuelle du curseur
 opt.number = true -- affiche le numéro absolu de la ligne active lorsque que relativenumber est activé

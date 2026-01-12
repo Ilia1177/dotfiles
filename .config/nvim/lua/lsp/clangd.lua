@@ -6,9 +6,18 @@ local utils = require("lsp.utils")
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "c", "cpp" },
   callback = function(args)
+  vim.notify("FileType autocmd triggered for: " .. vim.bo[args.buf].filetype, vim.log.levels.INFO)
+
     if #vim.lsp.get_clients({ name = "clangd", bufnr = args.buf }) > 0 then
       return
     end
+
+  root = utils.get_root({
+	".clangd",
+	".git",
+	"Makefile",
+	"compile_commands.json",
+  }) or vim.fn.getcwd()
 
     vim.lsp.start({
       name = "clangd",
@@ -18,12 +27,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		  "--clang-tidy",
 		  "--all-scopes-completion",
 		},
-      root_dir = utils.get_root({
-        ".clangd",
-        ".git",
-        "Makefile",
-        "compile_commands.json",
-      }),
+	  root_dir = root,
       on_attach = lsp.on_attach,
     })
   end,

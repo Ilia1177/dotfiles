@@ -23,7 +23,7 @@ vim.api.nvim_create_autocmd("FileType", {
         "package.json",
         "jsconfig.json",
         ".git",
-      }),
+      }) or vim.fn.getcwd(),
       on_attach = lsp.on_attach,
       capabilities = utils.default_capabilities(),
       settings = {

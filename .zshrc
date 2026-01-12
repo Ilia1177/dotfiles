@@ -1,4 +1,3 @@
-
 eval "$(/opt/homebrew/bin/brew shellenv zsh)"
 alias ls='ls --color=auto'
 alias mkclass='~/.local/bin/scripts/ocf.sh'
@@ -33,3 +32,4 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export PATH="/usr/local/opt/openjdk@21/bin:$PATH"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
+autoload -Uz compinit && compinit
