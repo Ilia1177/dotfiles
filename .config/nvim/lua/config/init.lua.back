@@ -1,0 +1,3 @@
+keymaps = require(config.keymaps)
+
+keymaps.setup_general()

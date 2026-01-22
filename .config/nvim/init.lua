@@ -1,5 +1,6 @@
 require("config.options")
 require("config.keymaps")
+require("config.keymaps").setup_general()
 require("config.autocmds")
 require("config.terminal")
 require("core.lazy")

@@ -49,16 +49,21 @@ opt.linebreak = true      -- Wrap at word boundaries (prevents splitting words)
 opt.breakindent = true    -- Indent wrapped lines visually
 
 
- -- opt.foldmethod = "expr" -- NOT WORKIN
+-- Custom foldtext function to show function names
+function _G.fold_with_name()
+  local line = vim.fn.getline(vim.v.foldstart)
+  local line_count = vim.v.foldend - vim.v.foldstart + 1
+  
+  -- Clean up the line: trim whitespace and remove opening brace
+  line = line:gsub("^%s+", ""):gsub("%s*{%s*$", "")
+  
+  return string.format("  %s ... (%d lines)", line, line_count)
+end
 
- -- opt.foldexpr = "nvim_treesitter#foldexpr()" -- NOT WORKINK --
--- opt.foldmethod = "syntax"
--- opt.foldenable = false       -- Start with folds open
--- opt.foldlevel = 99           -- Show all folds by default
-
-opt.foldmethod = "syntax"
--- opt.foldexpr = "nvim_treesitter#foldexpr()"
--- opt.foldexpr = "syntax"
-opt.foldlevel = 99 -- Keep folds open by default
-opt.foldenable = true
-opt.foldtext = [[v:lua.vim.treesitter.foldtext()]]
+-- Set Treesitter-based folding globally
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99  -- Keep folds open by default
+vim.opt.foldenable = true
+vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+vim.opt.foldtext = "v:lua.fold_with_name()"
