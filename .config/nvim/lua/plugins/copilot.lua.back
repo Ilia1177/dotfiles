@@ -1,0 +1,11 @@
+return {
+  "zbirenbaum/copilot.lua",
+  lazy = false, -- force it to load early priority = 1000, -- load before everything else
+  config = function()
+    require("copilot").setup({
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    })
+  end,
+}
+

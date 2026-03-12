@@ -48,6 +48,15 @@ opt.wrap = true           -- Enable line wrapping
 opt.linebreak = true      -- Wrap at word boundaries (prevents splitting words)
 opt.breakindent = true    -- Indent wrapped lines visually
 
+-- vim.opt.list = true
+-- vim.opt.listchars = {
+--   eol = '$',
+--   tab = '> ',
+--   trail = '·',
+--   extends = '>',
+--   precedes = '<',
+--   space = '␣'
+-- }
 
 -- Custom foldtext function to show function names
 function _G.fold_with_name()
@@ -67,3 +76,5 @@ vim.opt.foldlevel = 99  -- Keep folds open by default
 vim.opt.foldenable = true
 vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
 vim.opt.foldtext = "v:lua.fold_with_name()"
+
+opt.colorcolumn = "40,80"

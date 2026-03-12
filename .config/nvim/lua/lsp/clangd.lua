@@ -1,36 +1,61 @@
--- lua/lsp/clangd.lua
-
+-- local lsp = require("lsp")
+-- local utils = require("lsp.utils")
+--
+-- local binary = "/usr/bin/clangd"
+--
+-- vim.lsp.config("clangd", {
+--   cmd = { binary, "--background-index", "--clang-tidy", "--pch-storage=memory"},
+--   filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+--   root_markers = { ".git", "compile_commands.json", "compile_flags.txt", "CMakeLists.txt", ".clangd" },
+--   on_attach = function(client, bufnr)
+--     lsp.on_attach(client, bufnr)
+--   end,
+--   capabilities = utils.default_capabilities(),
+-- })
+--
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--     vim.lsp.diagnostic.on_publish_diagnostics, {
+--         update_in_insert = true,
+-- 		 	debounce_text_changes = 100, -- lower = faster (default is 150ms)
+--     }
+-- )
+-- vim.lsp.enable("clangd")
+-- nvim/lua/lsp/clangd.lua  ← fix the extension!
 local lsp = require("lsp")
 local utils = require("lsp.utils")
+local binary = "/usr/bin/clangd"
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "c", "cpp" },
-  callback = function(args)
-  vim.notify("FileType autocmd triggered for: " .. vim.bo[args.buf].filetype, vim.log.levels.INFO)
-
-    if #vim.lsp.get_clients({ name = "clangd", bufnr = args.buf }) > 0 then
-      return
-    end
-
-  root = utils.get_root({
-	".clangd",
-	".git",
-	"Makefile",
-	"compile_commands.json",
-  }) or vim.fn.getcwd()
-
-    vim.lsp.start({
-      name = "clangd",
-	  cmd = {
-		  "clangd",
-		  "--background-index",
-		  "--clang-tidy",
-		  "--all-scopes-completion",
-		  "--query-driver=/opt/homebrew/bin/c++,/usr/bin/c++",
-		  "--compile-commands-dir=" .. root,
-		},
-	  root_dir = root,
-      on_attach = lsp.on_attach,
-    })
+vim.lsp.config("clangd", {
+  cmd = {
+    binary,
+    "--background-index",
+    "--clang-tidy",
+    "--pch-storage=memory",
+    "--completion-style=detailed",  -- better completions
+    "--header-insertion=iwyu",
+  },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+  root_markers = {
+    ".git",
+    "compile_commands.json",
+    "compile_flags.txt",
+    "CMakeLists.txt",
+    ".clangd",
+  },
+  single_file_support = true,   -- ← fixes detachment on buffers without root
+  autostart = true,
+  on_attach = function(client, bufnr)
+    lsp.on_attach(client, bufnr)
   end,
+  capabilities = utils.default_capabilities(),
 })
+
+-- Correct way to configure diagnostics in Neovim 0.10+
+vim.diagnostic.config({
+  update_in_insert = true,
+  virtual_text = true,
+  signs = true,
+  underline = true,
+})
+
+vim.lsp.enable("clangd")

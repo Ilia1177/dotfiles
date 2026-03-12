@@ -1,19 +1,8 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
-	keys = {
-		{ "<leader>f", desc = "+fold" },
-		{
-			"<leader>fo",
-			function()
-				require("fold_comments").toggle()
-			end,
-			desc = "Toggle fold: multiline comments",
-			mode = "n",
-		},
-	},
 	config = function()
-		local configs = require("nvim-treesitter.configs")
+		local configs = require("nvim-treesitter")
 		configs.setup({
 			ensure_installed = {
 				"c",
@@ -43,6 +32,6 @@ return {
 			},
 		})
 	end,
-	"nvim-treesitter/playground",
-	cmd = "TSPlaygroundToggle",
+	-- "nvim-treesitter/playground",
+	-- cmd = "TSPlaygroundToggle",
 }

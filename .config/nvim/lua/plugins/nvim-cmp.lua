@@ -5,13 +5,13 @@ return {
     "hrsh7th/cmp-buffer", -- source pour compléter le texte déjà présent dans le buffer
     "hrsh7th/cmp-path", -- source pour compléter les chemins des fichiers
     "hrsh7th/cmp-cmdline", -- source pour les completions de la cmdline de vim
-    -- {
-    --   "L3MON4D3/LuaSnip",
+    {
+      "L3MON4D3/LuaSnip",
     --   -- follow latest release.
-    --   version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+      version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
     --   -- install jsregexp (optional!).
-    --   build = "make install_jsregexp",
-    -- },
+      build = "make install_jsregexp",
+    },
     "saadparwaiz1/cmp_luasnip", -- ajoute LuaSnip à l'autocompletion
     "rafamadriz/friendly-snippets", -- collection de snippets pratiques
     "hrsh7th/cmp-emoji", -- complétion d'émojis à la saisie de :
@@ -23,7 +23,7 @@ return {
     local lspkind = require("lspkind")
 
     -- chargement des snippets (e.g. friendly-snippets)
-    -- require("luasnip.loaders.from_vscode").lazy_load()
+    require("luasnip.loaders.from_vscode").lazy_load()
 
     cmp.setup({
       completion = {

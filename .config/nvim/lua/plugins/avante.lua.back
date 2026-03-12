@@ -1,0 +1,52 @@
+return {
+  "yetone/avante.nvim",
+  event = "VeryLazy",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvim-treesitter/nvim-treesitter",
+    "MunifTanjim/nui.nvim",
+    {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      event = "InsertEnter",
+      config = function()
+        require("copilot").setup({
+          suggestion = { enabled = false },
+          panel = { enabled = false },
+        })
+      end,
+    },
+  },
+  config = function()
+    -- Ensure copilot is loaded first
+    require("copilot")
+    
+    -- Small delay to ensure copilot is fully initialized
+    vim.defer_fn(function()
+      require("avante").setup({
+        provider = "copilot",
+        ui = { layout = "vertical", width = 0.35, border = "rounded" },
+      })
+    end, 500)
+    
+    local map = vim.keymap.set
+    local opts = { noremap = true, silent = true }
+    
+    map("n", "<leader>ac", function()
+      vim.cmd("AvanteChat")
+    end, vim.tbl_extend("force", opts, { desc = "AI Chat (Avante)" }))
+    
+    map("v", "<leader>ae", function()
+      vim.cmd("AvanteAsk")
+    end, vim.tbl_extend("force", opts, { desc = "AI Ask about selection" }))
+    
+    map("n", "<leader>ag", function()
+      vim.cmd("enew")
+      vim.cmd("AvanteChat")
+    end, vim.tbl_extend("force", opts, { desc = "AI Generate code in new buffer" }))
+    
+    map("n", "<leader>ax", function()
+      vim.cmd("AvanteAsk")
+    end, vim.tbl_extend("force", opts, { desc = "AI Explain code at cursor" }))
+  end,
+}

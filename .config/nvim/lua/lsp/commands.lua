@@ -22,7 +22,8 @@ vim.api.nvim_create_user_command('LspRestart', function()
     vim.cmd('doautocmd FileType')
     print("LSP restarted")
   end, 100)
-end, {})
+end, {}
+)
 
 -- Clean LSP log command
 vim.api.nvim_create_user_command('LspLogClean', function()
@@ -52,4 +53,17 @@ vim.api.nvim_create_autocmd({"BufReadPost", "BufNewFile"}, {
       end, 50)
     end
   end,
+})
+
+vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter", "InsertLeave" }, {
+    callback = function()
+        vim.lsp.buf.document_highlight()
+        vim.diagnostic.reset(nil, 0)
+        -- Request fresh diagnostics
+        for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+            if client.supports_method("textDocument/diagnostic") then
+                vim.lsp.diagnostic.get(0)
+            end
+        end
+    end,
 })
