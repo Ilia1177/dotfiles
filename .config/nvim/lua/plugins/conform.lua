@@ -1,6 +1,6 @@
 return {
 	"stevearc/conform.nvim",
-	enable = false,
+	enable = true,
 	opts = {},
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
@@ -8,6 +8,8 @@ return {
 
 		conform.setup({
 			formatters_by_ft = {
+				cpp = { "clang_format" },
+    			c = { "clang_format" },
 				css = { "prettier" },
 				elm = { "elm_format" },
 				graphql = { "prettier" },

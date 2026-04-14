@@ -20,12 +20,14 @@ if [ -z "$2" ]; then
 fi
 
 # Run Ghostscript conversion
-#gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dSAFER -sOutputFile="$2" "$1"
 gs \
- -sDEVICE=pdfimage8 \
+ -sDEVICE=pdfimage24 \
  -dNOPAUSE -dBATCH -dSAFER \
- -dDownScaleFactor=2 \
- -r600 \
+ -dNOFONTMAP \
+ -dNOSYSTEMFONTS \
+ -r1200 \
+ -dGraphicsAlphaBits=4 \
+ -dTextAlphaBits=4 \
  -sOutputFile="$2" "$1"
 # Check if conversion succeeded
 if [ $? -eq 0 ]; then
