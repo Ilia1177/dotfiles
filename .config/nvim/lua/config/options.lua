@@ -70,11 +70,15 @@ function _G.fold_with_name()
 end
 
 -- Set Treesitter-based folding globally
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldlevel = 99  -- Keep folds open by default
-vim.opt.foldenable = true
-vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
-vim.opt.foldtext = "v:lua.fold_with_name()"
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- vim.opt.foldlevel = 99  -- Keep folds open by default
+-- vim.opt.foldenable = true
+-- vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+-- vim.opt.foldtext = "v:lua.fold_with_name()"
 
 opt.colorcolumn = "40,80"
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99   -- start with all folds open

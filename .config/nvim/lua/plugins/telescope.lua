@@ -22,6 +22,19 @@ return {
         path_display = { "smart" },
         file_ignore_patterns = { ".git/", "node_modules" },
 
+		  vimgrep_arguments = {
+		  "rg",
+		  "--color=never",
+		  "--no-heading",
+		  "--with-filename",
+		  "--line-number",
+		  "--column",
+		  "--smart-case",
+
+		  "--hidden",
+		  "--no-ignore",
+		},
+
         mappings = {
           i = {
             ["<C-j>"] = actions.move_selection_next,
