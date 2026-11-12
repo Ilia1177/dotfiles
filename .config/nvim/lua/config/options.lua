@@ -1,84 +1,59 @@
 local opt = vim.opt -- raccourci pour un peu plus de concision
-vim.cmd('filetype plugin indent on')
+
 -- numéros de ligne
-opt.relativenumber = true -- affichage des numéros de ligne relatives à la position actuelle du curseur
-opt.number = true -- affiche le numéro absolu de la ligne active lorsque que relativenumber est activé
+opt.relativenumber = true -- numéros relatifs à la position du curseur
+opt.number = true -- numéro absolu sur la ligne active
 
 -- tabs & indentation
-opt.tabstop = 4 -- 2 espaces pour les tabulations
-opt.shiftwidth = 4 -- 2 espaces pour la taille des indentations
-opt.autoindent = true -- on garde l'indentation actuelle à la prochaine ligne
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.autoindent = true -- conserve l'indentation de la ligne précédente
 
 -- recherche
-opt.ignorecase = true -- ignore la casse quand on recherche
-opt.smartcase = true -- sauf quand on fait une recherche avec des majuscules, on rebascule en sensible à la casse
-opt.hlsearch = true -- surlignage de toutes les occurences de la recherche en cours
+opt.ignorecase = true -- recherche insensible à la casse…
+opt.smartcase = true -- …sauf si la recherche contient une majuscule
+opt.hlsearch = true -- surligne toutes les occurrences
 
 -- ligne du curseur
-opt.cursorline = true -- surlignage de la ligne active
+opt.cursorline = true
 
 -- apparence
-
--- termguicolors est nécessaire pour que les thèmes modernes fonctionnent
-opt.termguicolors = true
-opt.background = "dark" -- dark ou light en fonction de votre préférence
-opt.signcolumn = "yes" -- affiche une colonne en plus à gauche pour afficher les signes (évite de décaler le texte)
+opt.termguicolors = true -- nécessaire pour les thèmes modernes
+opt.background = "dark"
+opt.signcolumn = "yes" -- évite de décaler le texte quand des signes apparaissent
+opt.colorcolumn = "80"
 
 -- retour
-opt.backspace = "indent,eol,start" -- on autorise l'utilisation de retour quand on indente, à la fin de ligne ou au début
+opt.backspace = "indent,eol,start"
 
--- presse papier
-opt.clipboard = "unnamedplus" -- on utilise le presse papier du système par défaut
+-- presse-papier
+opt.clipboard = "unnamedplus"
 
--- split des fenêtres
-opt.splitright = true -- le split vertical d'une fenêtre s'affiche à droite
-opt.splitbelow = true -- le split horizontal d'une fenêtre s'affiche en bas
+-- fenêtres
+opt.splitright = true
+opt.splitbelow = true
+opt.splitkeep = "screen"
 
-opt.swapfile = false -- on supprime le pénible fichier de swap
+-- divers
+opt.swapfile = false
+opt.undofile = true
+opt.confirm = true
+opt.scrolloff = 8
+opt.sidescrolloff = 8
+opt.updatetime = 250 -- diagnostics, gitsigns, document highlight plus réactifs
+opt.timeoutlen = 400
+opt.iskeyword:append("-") -- les mots contenant un - restent un seul mot
 
-opt.undofile = true -- on autorise l'undo à l'infini (même quand on revient sur un fichier qu'on avait fermé)
-
-opt.iskeyword:append("-") -- on traite les mots avec des - comme un seul mot
-
--- affichage des caractères spéciaux
+-- caractères spéciaux
 opt.list = true
 opt.listchars:append({ nbsp = "␣", trail = "•", precedes = "«", extends = "»", tab = "> " })
 
-opt.wrap = true           -- Enable line wrapping
-opt.linebreak = true      -- Wrap at word boundaries (prevents splitting words)
-opt.breakindent = true    -- Indent wrapped lines visually
+-- retour à la ligne
+opt.wrap = true
+opt.linebreak = true -- coupe aux frontières de mots
+opt.breakindent = true -- aligne visuellement les lignes coupées
 
--- vim.opt.list = true
--- vim.opt.listchars = {
---   eol = '$',
---   tab = '> ',
---   trail = '·',
---   extends = '>',
---   precedes = '<',
---   space = '␣'
--- }
-
--- Custom foldtext function to show function names
-function _G.fold_with_name()
-  local line = vim.fn.getline(vim.v.foldstart)
-  local line_count = vim.v.foldend - vim.v.foldstart + 1
-  
-  -- Clean up the line: trim whitespace and remove opening brace
-  line = line:gsub("^%s+", ""):gsub("%s*{%s*$", "")
-  
-  return string.format("  %s ... (%d lines)", line, line_count)
-end
-
--- Set Treesitter-based folding globally
--- vim.opt.foldmethod = "expr"
--- vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
--- vim.opt.foldlevel = 99  -- Keep folds open by default
--- vim.opt.foldenable = true
--- vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
--- vim.opt.foldtext = "v:lua.fold_with_name()"
-
-opt.colorcolumn = "40,80"
-
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldlevel = 99   -- start with all folds open
+-- pliage basé sur Treesitter (voir aussi lua/config/treesitter.lua)
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99

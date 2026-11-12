@@ -15,15 +15,14 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Configuration de lazy.nvim et importation du répertoire `plugins`
 require("lazy").setup({ { import = "plugins" } }, {
-	checker = {
-    	enabled = true,
-    	notify = false,
-	},
-	install = { colorscheme = { "everforest" } },
-  -- désactive la pénible notification au démarrage
-	change_detection = {
-    	notify = false,
-  	},
+  checker = {
+    enabled = true,
+    notify = false,
+  },
+  install = { colorscheme = { "everforest" } },
+  -- désactive la notification au démarrage
+  change_detection = {
+    notify = false,
+  },
 })

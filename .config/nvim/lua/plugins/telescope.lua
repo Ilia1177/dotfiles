@@ -1,12 +1,18 @@
 return {
   "nvim-telescope/telescope.nvim",
   branch = "master",
-
+  cmd = "Telescope",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    -- fzf implémentation en C pour plus de rapidité
+    -- implémentation fzf en C, plus rapide
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-tree/nvim-web-devicons",
+  },
+  keys = {
+    { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Rechercher un fichier" },
+    { "<leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Rechercher dans le contenu des fichiers" },
+    { "<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Rechercher dans les buffers" },
+    { "<leader>fx", "<cmd>Telescope grep_string<cr>", desc = "Rechercher le mot sous le curseur" },
   },
   config = function()
     local telescope = require("telescope")
@@ -14,27 +20,22 @@ return {
 
     telescope.setup({
       defaults = {
-
-        -- Parce que c'est joli
-		use_ignore_files = false,
-        prompt_prefix = " ",
-        selection_caret = " ",
+        use_ignore_files = false,
+        prompt_prefix = " ",
+        selection_caret = " ",
         path_display = { "smart" },
         file_ignore_patterns = { ".git/", "node_modules" },
-
-		  vimgrep_arguments = {
-		  "rg",
-		  "--color=never",
-		  "--no-heading",
-		  "--with-filename",
-		  "--line-number",
-		  "--column",
-		  "--smart-case",
-
-		  "--hidden",
-		  "--no-ignore",
-		},
-
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+          "--no-ignore",
+        },
         mappings = {
           i = {
             ["<C-j>"] = actions.move_selection_next,
@@ -45,9 +46,5 @@ return {
     })
 
     telescope.load_extension("fzf")
-
-    -- set keymaps
-
   end,
 }
-

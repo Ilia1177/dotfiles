@@ -1,15 +1,17 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
 require("core.lazy")
+
+-- options, keymaps et autocmds généraux
 require("config.options")
 require("config.keymaps")
-require("config.keymaps").setup_general()
 require("config.autocmds")
+require("config.treesitter")
+require("config.commands")
 require("config.terminal")
+require("config.toggle-fold-comments")
 
-require("lsp")          -- on_attach
-require("lsp.clangd")  -- server configs
-require("lsp.ts_ls")
-require("lsp.luaLs")
-require("lsp.init")
-require("lsp.commands")
+-- LSP : comportement commun puis définition des serveurs
+require("lsp")
+require("lsp.servers")

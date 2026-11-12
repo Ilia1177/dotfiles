@@ -1,37 +1,31 @@
 return {
-	"nvim-treesitter/nvim-treesitter",
-	build = ":TSUpdate",
-	config = function()
-		local configs = require("nvim-treesitter")
-		configs.setup({
-			ensure_installed = {
-				"c",
-				"lua",
-				"vim",
-				"vimdoc",
-				"query",
-				"elixir",
-				"heex",
-				"javascript",
-				"html",
-				"cpp",
-				"python",
-				"bash",
-			},
-			sync_install = false,
-			highlight = { enable = true },
-			indent = { enable = true },
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "<Enter>",
-					node_incremental = "<Enter>",
-					scope_incremental = false,
-					node_decremental = "<Backspace>",
-				},
-			},
-		})
-	end,
-	-- "nvim-treesitter/playground",
-	-- cmd = "TSPlaygroundToggle",
+  "nvim-treesitter/nvim-treesitter",
+  branch = "main",
+  lazy = false,
+  build = ":TSUpdate",
+  config = function()
+    -- installation asynchrone des parsers (no-op si déjà installés)
+    require("nvim-treesitter").install({
+      "bash",
+      "c",
+      "cpp",
+      "css",
+      "diff",
+      "elixir",
+      "heex",
+      "html",
+      "javascript",
+      "json",
+      "lua",
+      "markdown",
+      "python",
+      "query",
+      "scss",
+      "tsx",
+      "typescript",
+      "vim",
+      "vimdoc",
+      "yaml",
+    })
+  end,
 }
