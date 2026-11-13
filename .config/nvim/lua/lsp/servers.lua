@@ -31,6 +31,30 @@ local servers = {
     single_file_support = true,
   },
 
+  basedpyright = {
+    cmd = { "basedpyright-langserver", "--stdio" },
+    filetypes = { "python" },
+    root_markers = {
+      "pyproject.toml",
+      "pyrightconfig.json",
+      "setup.py",
+      "setup.cfg",
+      "requirements.txt",
+      ".git",
+    },
+    single_file_support = true,
+    settings = {
+      basedpyright = {
+        analysis = {
+          typeCheckingMode = "standard",
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "openFilesOnly",
+        },
+      },
+    },
+  },
+
   lua_ls = {
     cmd = { "lua-language-server" },
     filetypes = { "lua" },
